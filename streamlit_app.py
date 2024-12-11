@@ -3,8 +3,6 @@ import streamlit as st
 from snowflake.snowpark import Session
 from snowflake.snowpark.functions import col
 import requests
-smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon")
-st.text(smoothiefroot_response)
 
 # Streamlit app header
 st.title(":cup_with_straw: Customize Your Smoothie! :cup_with_straw:")
@@ -51,3 +49,5 @@ try:
                 st.error(f"Error placing order: {e}")
 except Exception as conn_error:
     st.error(f"Failed to connect to Snowflake: {conn_error}")
+smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon")
+st.text(smoothiefroot_response)
