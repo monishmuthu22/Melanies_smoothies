@@ -33,11 +33,19 @@ try:
 
     # Multiselect for ingredients
     ingredients_list = st.multiselect('Choose up to 5 ingredients:', fruit_list, max_selections=5)
+    
     if ingredients_list:
         ingredients_string = ', '.join(ingredients_list)
-        st. subheader(fruit_chosen + ' Nutrition Information' )
-        smoothiefroot_response = requests.get ("https://my.smoothiefroot.com/api/fruit/" + fruit_chosen)
-        sf_df = st. dataframe(data=smoothiefroot_response.json(), use_container_width = True)
+        
+        # Allow user to pick a fruit for nutrition info
+        fruit_chosen = st.selectbox('Select a fruit to view its nutrition information:', ingredients_list)
+        if fruit_chosen:
+            st.subheader(f'{fruit_chosen} Nutrition Information')
+            smoothiefroot_response = requests.get(f"https://my.smoothiefroot.com/api/fruit/{fruit_chosen}")
+            if smoothiefroot_response.status_code == 200:
+                st.dataframe(data=smoothiefroot_response.json(), use_container_width=True)
+            else:
+                st.error('Failed to fetch nutrition information.')
 
         # Insert order into the database
         if st.button('Place Order'):
@@ -52,3 +60,4 @@ try:
                 st.error(f"Error placing order: {e}")
 except Exception as conn_error:
     st.error(f"Failed to connect to Snowflake: {conn_error}")
+
