@@ -35,6 +35,9 @@ try:
     ingredients_list = st.multiselect('Choose up to 5 ingredients:', fruit_list, max_selections=5)
     if ingredients_list:
         ingredients_string = ', '.join(ingredients_list)
+        st. subheader(fruit_chosen + ' Nutrition Information' )
+smoothiefroot_response = requests.get ("https://my.smoothiefroot.com/api/fruit/" + fruit_chosen)
+sf_df = st. dataframe(data=smoothiefroot_response.json(), use_container_width = True)
 
         # Insert order into the database
         if st.button('Place Order'):
@@ -49,5 +52,3 @@ try:
                 st.error(f"Error placing order: {e}")
 except Exception as conn_error:
     st.error(f"Failed to connect to Snowflake: {conn_error}")
-smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon")
-sf_df = st.dataframe(smoothiefroot_response.json(), use_container_width = True)
